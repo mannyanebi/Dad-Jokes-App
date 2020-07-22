@@ -15,7 +15,7 @@ class JokeList extends Component{
         super(props);
         
         this.state = {
-            jokes: []
+            jokes: JSON.parse(window.localStorage.getItem('jokes') || "[]")
         }
 
         // this.handleVote = this.handleVote.bind(this)
@@ -27,7 +27,7 @@ class JokeList extends Component{
         }))
     }
 
-    async componentDidMount(){
+    async getJokes(){
         let newJokes = []
 
         while(newJokes.length < this.props.numOfDadJokes){
@@ -39,6 +39,14 @@ class JokeList extends Component{
         this.setState({
             jokes: newJokes
         })
+
+        window.localStorage.setItem('jokes', JSON.stringify(newJokes));
+    }
+
+    componentDidMount(){
+        if(this.state.jokes.length === 0){
+            this.getJokes()
+        }
     }
 
     render(){
